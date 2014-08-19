@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>DotNetRules</id>
+    <version>1.0.4947.35776</version>
+    <title>DotNetRules</title>
+    <authors>Matthias Kainer</authors>
+    <owners>Matthias Kainer</owners>
+    <projectUrl>https://github.com/MatthiasKainer/DotNetRules</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>The DotNetRules Library is an approach to apply policies to objects without the need to call each Policy manually from code, but with one simple call. Using this approach you can deploy your policies in an external library and deploy them independently of the core application.</description>
+    <summary>The DotNetRules Library is a .net rule engine that applies policies to objects without the need to call each Policy manually from code, but with one simple call</summary>
+  </metadata>
+</package>
