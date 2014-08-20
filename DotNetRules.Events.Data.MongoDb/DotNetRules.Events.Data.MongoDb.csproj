@@ -37,7 +37,7 @@
     </Reference>
     <Reference Include="DotNetRules.Events, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\DotNetRules.Events.1.0.1\lib\net40\DotNetRules.Events.dll</HintPath>
+      <HintPath>..\packages\DotNetRules.Events.1.0.1.11\lib\net40\DotNetRules.Events.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Bson">
       <HintPath>..\packages\mongocsharpdriver.1.9.2\lib\net35\MongoDB.Bson.dll</HintPath>

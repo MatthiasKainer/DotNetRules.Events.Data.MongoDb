@@ -1,13 +1,10 @@
 namespace DotNetRules.Events.Data.MongoDb
 {
     using System.Collections.Generic;
-    using System.Configuration;
     using System.Linq;
 
     public class EventStore : ICanStoreAndLoadEvents
     {
-        private readonly string application = ConfigurationManager.AppSettings["application.name"];
-
         private readonly MongoSession<Event> session;
 
         public EventStore()
@@ -27,22 +24,22 @@ namespace DotNetRules.Events.Data.MongoDb
             this.session.Add(@event);
         }
 
-        public IEnumerable<BaseEvent> GetAllEvents()
+        public IEnumerable<BaseEvent> GetAllEvents(string applicationName)
         {
-            return this.session.Queryable.Where(_ => _.ContextName == this.application).OrderByDescending(_ => _.Created).ToList().Select(_ => _.Get());
+            return this.session.Queryable.Where(_ => _.ContextName == applicationName).OrderByDescending(_ => _.Created).ToList().Select(_ => _.Get());
         }
 
-        public IEnumerable<TEvents> GetSpecificEventsFromStore<TEvents>() where TEvents : BaseEvent
+        public IEnumerable<TEvents> GetSpecificEventsFromStore<TEvents>(string applicationName) where TEvents : BaseEvent
         {
-            var events = this.session.Queryable.Where(_ => _.ContextName == this.application
+            var events = this.session.Queryable.Where(_ => _.ContextName == applicationName
                                                       && _.EventType == typeof(TEvents).AssemblyQualifiedName)
                 .OrderByDescending(_ => _.Created);
             return events.ToList().Select(_ => _.Get<TEvents>());
         }
 
-        public IEnumerable<TEvents> GetEventsFromStoreByEntity<TEvents>() where TEvents : BaseEvent
+        public IEnumerable<TEvents> GetEventsFromStoreByEntity<TEvents>(string applicationName) where TEvents : BaseEvent
         {
-            var events = this.session.Queryable.Where(_ => _.ContextName == this.application
+            var events = this.session.Queryable.Where(_ => _.ContextName == applicationName
                                                       && _.EntityContextType == typeof(TEvents).AssemblyQualifiedName)
                 .OrderByDescending(_ => _.Created);
             return events.ToList().Select(_ => _.Get<TEvents>());
