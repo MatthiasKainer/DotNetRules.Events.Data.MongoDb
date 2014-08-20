@@ -4,7 +4,7 @@ namespace DotNetRules.Events.Data.MongoDb
     using System.Configuration;
     using System.Linq;
 
-    public class EventStore 
+    public class EventStore : ICanStoreAndLoadEvents
     {
         private readonly string application = ConfigurationManager.AppSettings["application.name"];
 
@@ -32,17 +32,17 @@ namespace DotNetRules.Events.Data.MongoDb
             return this.session.Queryable.Where(_ => _.ContextName == this.application).OrderByDescending(_ => _.Created).ToList().Select(_ => _.Get());
         }
 
-        public IEnumerable<TEvents> GetEventsFromStore<TEvents>() where TEvents : BaseEvent
+        public IEnumerable<TEvents> GetSpecificEventsFromStore<TEvents>() where TEvents : BaseEvent
         {
-            var events = this.session.Queryable.Where(_ => _.ContextName == this.application 
+            var events = this.session.Queryable.Where(_ => _.ContextName == this.application
                                                       && _.EventType == typeof(TEvents).AssemblyQualifiedName)
                 .OrderByDescending(_ => _.Created);
             return events.ToList().Select(_ => _.Get<TEvents>());
         }
 
-        public IEnumerable<TEvents> GetBoundedContextEventsFromStore<TEvents>() where TEvents : BaseEvent
+        public IEnumerable<TEvents> GetEventsFromStoreByEntity<TEvents>() where TEvents : BaseEvent
         {
-            var events = this.session.Queryable.Where(_ => _.ContextName == this.application 
+            var events = this.session.Queryable.Where(_ => _.ContextName == this.application
                                                       && _.EntityContextType == typeof(TEvents).AssemblyQualifiedName)
                 .OrderByDescending(_ => _.Created);
             return events.ToList().Select(_ => _.Get<TEvents>());
