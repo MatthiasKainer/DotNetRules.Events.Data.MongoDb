@@ -1,5 +1,6 @@
 ﻿namespace DotNetRules.Events.Data.MongoDb
 {
+    using System;
     using System.Configuration;
     using System.Linq;
 
@@ -11,12 +12,20 @@
         private readonly MongoDatabase database;
 
         public MongoSession()
-            : this(ConfigurationManager.ConnectionStrings["DotNetRules.Events.Data.MongoDb"].ConnectionString)
+            : this(
+                ConfigurationManager.ConnectionStrings["DotNetRules.Events.Data.MongoDb"] != null
+                    ? ConfigurationManager.ConnectionStrings["DotNetRules.Events.Data.MongoDb"].ConnectionString
+                    : string.Empty)
         {
         }
 
         public MongoSession(string connectionString)
         {
+            if (connectionString == null)
+            {
+                throw new ArgumentNullException("connectionString", "The connection string must not be null. Please add a connection string named DotNetRules.Events.Data.MongoDb");
+            }
+
             var url = new MongoUrl(connectionString);
             var client = new MongoClient(url);
             this.database = client.GetServer().GetDatabase(url.DatabaseName);
